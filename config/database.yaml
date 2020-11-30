@@ -1,0 +1,14 @@
+# This file should be private
+# Ignore changes to this file using: git update-index --skip-worktree config/database.yaml
+# to restore: git update-index --no-skip-worktree config/database.yml
+# You can get a list of files that are marked skipped with: git ls-files -v . | grep ^S
+
+# psycopg2.OperationalError: fe_sendauth: no password supplied
+# SHOW hba_file;
+
+database: 
+user: 
+password: 
+host: 
+port: 
+

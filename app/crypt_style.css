@@ -1,0 +1,140 @@
+/* HEADER colour & height */
+
+.skin-black .main-header .navbar {
+    background-color: #222650;
+}
+
+
+.main-header > .navbar {
+    height: 60px;
+}
+
+
+.skin-black .main-header .navbar>.sidebar-toggle {
+    color: #FFFFFF;
+    height: 60px;
+    border-right: 0px solid #eee; 
+}
+
+
+.skin-black .main-header>.logo {
+    background-color: #222650;
+    color: #037d8c;
+    border-right: 0px solid #eee;
+    height: 60px;
+}
+
+
+/* SIDEBAR */
+
+.skin-black .left-side, .skin-black .main-sidebar, .skin-black .wrapper {
+    background-color: #222650;
+    background-image: linear-gradient(#037d8c,#067688, #0f5b75, #0e5e77,#1c365b, #222650);
+}
+
+
+.sidebar {
+    color: #222650;
+}
+
+
+.col-sm-8, .col-sm-2 {
+    position: relative;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+    font-size: large;
+    color: ghostwhite;
+    font-weight: bold;
+}
+
+
+.glyphicon-info-sign:before,.fa-wrench:before,.fa-lightbulb-o:before {
+    position: relative;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+    font-size: large;
+    color: mediumpurple;
+    font-weight: bold;
+}
+
+
+label {
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: 700;
+    color: ghostwhite;
+}
+
+
+hr {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 0;
+    border-top: 1px solid #5766bb;
+}
+
+
+/* BODY */
+
+.content-wrapper, .right-side {
+    background-color: #222650;
+}
+
+
+.content {
+    margin-top: 1px;
+  }
+  
+
+.box .border-right {
+    border-right: 1px solid #5766bb;
+}
+
+
+.box .border-left {
+    border-right: 1px solid #5766bb;
+}
+
+
+.bttn-stretch.bttn-primary {
+    color: #037d8c;
+}
+
+
+.intro-divider {
+  height: 6px;
+  background: transparent linear-gradient(to right, #157BA3 0%, #96D602 100%) 
+  repeat scroll   0% 0%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+
+.intro {
+    font-family: 'Gustan', Helvetica, Arial, sans-serif;
+    font-weight: 200;
+    font-size: 15px;
+    color: #414042;
+}
+
+
+/* code shyte */
+code {
+    color: #fff;
+    background-color: transparent;
+}
+
+.bg-blue {
+    background-color: #067688!important;
+}
+
+ul {
+    padding-inline-start: 15px;
+}
+
+.box-title {
+    color: #222650;
+}
