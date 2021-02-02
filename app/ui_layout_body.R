@@ -20,7 +20,7 @@ translation_ui_func<-function(){
         #height = '250px',
         closable = FALSE,
         tags$code(textOutput(outputId = 'first_lang')),
-        tags$style(type="text/css", "#first_lang {white-space: pre-line; padding-left: 25px;}")
+        tags$style(type="text/css", "#first_lang {white-space: pre-line; overflow-wrap: break-word; padding-left: 12px;}")
      ),
      tags$div(class = 'intro','Translate To'),
      br(),
@@ -32,7 +32,7 @@ translation_ui_func<-function(){
         #height = '250px',
         closable = FALSE,
         tags$code(textOutput(outputId = 'second_lang')),
-        tags$style(type="text/css", "#second_lang {white-space: pre-line; padding-left: 25px;}")
+        tags$style(type="text/css", "#second_lang {white-space: pre-line; overflow-wrap: break-word; padding-left: 12px;}")
       )    
     ),
     column(

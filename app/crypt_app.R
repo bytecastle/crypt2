@@ -9,8 +9,11 @@ dbHeader <- dashboardHeaderPlus(
                 titleWidth = 328,
                 tags$li(img(src = 'full_logo_white-01.png',
                             height="40px",
-                            style="margin:10px 620px 0px 100px"),
-                            class = "dropdown")
+                            style="margin:10px 540px 0px 100px"),
+                            class = "dropdown"),
+                tags$li(tags$a(href = "https://github.com/bytecastle/crypt2",
+                               img(src = "github_icon.png",height = "35px",
+                                   style="margin:10px")), class = "dropdown")
 ) #header end
 
 
@@ -20,7 +23,7 @@ sidebar <- dashboardSidebar(
   width = 370,
   br(),
   br(),
-  fluidRow(column(width=8,offset = 1,icon("wrench"),"Customization")),
+  fluidRow(tags$div(id = "title-icon",column(width=8,offset = 1,icon("wrench"),"Customization"))),
   br(),
   fluidRow(column(width = 9,offset = 1,
                   selectInput('select_lang1', 'Select Language',
@@ -30,16 +33,10 @@ sidebar <- dashboardSidebar(
                   uiOutput('ui_select_target_module')
   )),
   tags$hr(),
-  br(),
-  fluidRow(column(width=8,offset = 1,icon("lightbulb-o"),"Tips")),
-  br(),
-  fluidRow(column(width = 10,offset = 1,
-                  boxPlus(width = 11,
-                          status = "primary",
-                          collapsible = TRUE,
-                          closable = FALSE,
-                          uiOutput('tips_text')
-                          )))
+  div(id = "feedback",
+  p("If you would like to know more about ByteCastle or Crypt or would like to 
+    contribute, feel free to email me at",
+  tags$a("bytecastle2019@gmail.com",href = "mailto:bytecastle2019@gmail.com")))
 ) #sidebar end
 
 
@@ -55,9 +52,10 @@ body<-dashboardBody( # body start
   # ---------- TRANSLATION CENTAL ---------- #
   
   fluidRow(
-    column(width=2,icon(name="transfer",lib = "glyphicon"),"Translation")
+    tags$div(id = "title-icon",
+    column(width=5,icon(name="transfer",lib = "glyphicon"),"Translation")
     #column(width=2,icon(name="info-sign","glyphicon-3x",lib = "glyphicon"))
-  ), #row end for headings
+  )), #row end for headings
   br(),
   fluidRow(
     boxPlus(
@@ -78,24 +76,24 @@ body<-dashboardBody( # body start
   # ---------- OUTPUT AREA ---------- #
   
   fluidRow(
-    column(width=2,icon(name="edit"),"Output")
+    tags$div(id = "title-icon",
+    column(width=9,icon(name="edit"),"Output"),
+    column(width=2,icon("lightbulb-o"),"Tips"))
   ), 
   br(),
   fluidRow(
-    boxPlus(title = "First Language Output",
+    boxPlus(title = "Expected Output",
             status = "primary",
-            width = 6,
+            width = 9,
             collapsible = FALSE,
             closable = FALSE,
-            height = 300,
+            height = 400,
             formattableOutput('output_one')),
-    boxPlus(title = "Second Language Output",
+    boxPlus(title = NULL,
             status = "primary",
-            width = 6,
-            collapsible = FALSE,
-            closable = FALSE,
-            height = 300,
-            formattableOutput('output_two'))
+            width = 3,
+            height = 400,
+            tags$br(uiOutput('tips_text')))
   )
 ) #1 body end
 
@@ -103,34 +101,13 @@ body<-dashboardBody( # body start
 # ---------- UI ---------- #
 ui<-dashboardPagePlus(dbHeader,sidebar,body,skin = "black",
                       enable_preloader = TRUE,
-                      sidebar_fullCollapse = TRUE)
+                      sidebar_fullCollapse = TRUE,
+                      title = "ByteCastle")
 
 
 # ---------- SERVER ---------- #
 server<-function(input,output,session){
-  
-  # Define any Python packages needed for the app here:
-  PYTHON_DEPENDENCIES = c('numpy','pandas')
-  
-  # ------------------ App virtualenv setup (Do not edit) ------------------- #
-  
-  # virtualenv_dir = Sys.getenv('VIRTUALENV_NAME')
-  # python_path = Sys.getenv('PYTHON_PATH')
-  # 
-  # # Create virtual env and install dependencies
-  # reticulate::virtualenv_create(envname = virtualenv_dir, python = python_path)
-  # reticulate::virtualenv_install(virtualenv_dir, packages = PYTHON_DEPENDENCIES)
-  # reticulate::use_virtualenv(virtualenv_dir, required = T)
-  
-  # my code
-  reticulate::use_virtualenv('~/Desktop/Projects/crypt_project/cryptmatter',required = TRUE)
-  
-  # ------------------ Server Logic ----------------------------------------- #
-  
-  #click button to display custom names row
-  # shinyjs::onclick("bttnid01",
-  #                  shinyjs::toggle(id = "custom_names", anim = TRUE))
-  
+
   #select module for the 1st lang
   output$ui_select_module <- renderUI({
     req(input$select_lang1)
@@ -176,13 +153,17 @@ server<-function(input,output,session){
       filter(func == input$select_func, 
              lang %in% c(input$select_lang1,input$select_lang2), 
              mod %in% c(input$select_mod1,input$select_mod2)) %>% 
-      select(tips)
+      select(tips) %>% distinct()
     tip<-cryptdata_filtered$tips
     tags$ul(
       tags$br(),
-      tags$li(tip[1]),
+      if(!is.na(tip[1])){
+        tags$li( tip[1])
+      },
       tags$br(),
-      tags$li(tip[2])
+      if(!is.na(tip[2])){
+        tags$li( tip[2])
+      }
     )
   })
   
@@ -197,8 +178,7 @@ server<-function(input,output,session){
                           values = input$name_values,
                           nameFrame = input$name_dataframe,
                           nameCol1 = input$name_cols[1],
-                          nameCol2 = input$name_cols[2],
-                          arbValue = 5)
+                          nameCol2 = input$name_cols[2])
     choices<-get_values(input$name_cols[1],input$name_cols[2])
       if(input$select_lang1 == 'Postgresql'){
       x<-ifelse(is.numeric(choices$first_choice),gsub('type1','INTEGER',x),gsub('type1','VARCHAR',x))
@@ -220,8 +200,7 @@ server<-function(input,output,session){
                          values = input$name_values,
                          nameFrame = input$name_dataframe,
                          nameCol1 = input$name_cols[1],
-                         nameCol2 = input$name_cols[2],
-                         arbValue = 5)
+                         nameCol2 = input$name_cols[2])
     choices<-get_values(input$name_cols[1],input$name_cols[2])
     if(input$select_lang2 == 'Postgresql'){
       x<-ifelse(is.numeric(choices$first_choice),gsub('type1','INTEGER',x),gsub('type1','VARCHAR',x))
@@ -233,20 +212,18 @@ server<-function(input,output,session){
   })
   
   # 1st output
-  # output$output_one<-renderFormattable({
-  #   df<-table_output(syntax_final_one(),input$select_lang1)
-  #   formattable(df, lapply(1:nrow(df), function(row) {
-  #     area(row) ~ color_tile("lightpink", "lightblue")
-  #   }))
-  # })
+  output$output_one<-renderFormattable({
+    x <- lock_and_load_syntax(funct = input$select_func,
+                            language = "R",
+                            module = "dplyr",
+                            values = input$name_values,
+                            nameFrame = "lol_champions",
+                            nameCol1 = input$name_cols[1],
+                            nameCol2 = input$name_cols[2])
+    df <- eval(parse(text = x))
+    formattable(head(df),align = c("l",rep("r",ncol(df)-1)))
+  })
   
-  # 2nd output
-  # output$output_two<-renderDT({
-  #   df<-table_output(syntax_final_two(),input$select_lang2)
-  #   formattable(df, lapply(1:nrow(df), function(row) {
-  #     area(row) ~ color_tile("lightpink", "lightblue")
-  #   }))
-  # })
   
 } #end of server function
 
