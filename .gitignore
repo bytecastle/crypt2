@@ -1,0 +1,8 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+app/rsconnect/
+app/www/.DS_Store
+config/.DS_Store
+data/

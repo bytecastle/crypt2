@@ -2,8 +2,9 @@
 This script fetches data updated in the google sheets and downloads it as a csv to 'crypt/data' and then copies the
 data to the database.
 Before connecting to google sheets you need to set up a project through the google developers console and then create a
-service account then ask for crendentials for google sheets and google drive as a .json file which you then store in
+service account then ask for credentials for google sheets and google drive as a .json file which you then store in
 'crypt/config' as 'client_secret.json'.
+Although we do not have import pyscopy2 below, make sure that the module is downloaded into your library!
 """
 
 from sqlalchemy import create_engine
@@ -44,32 +45,32 @@ def get_crypt_data_2df():
     # select the worksheets you want from the sheet cryptdata
     wk1 = main_sheet.worksheet_by_title('dplyr_dict')
     wk2 = main_sheet.worksheet_by_title('datatable_dict')
-    wk3 = main_sheet.worksheet_by_title('numpy_dict')
+    # wk3 = main_sheet.worksheet_by_title('numpy_dict')
     wk4 = main_sheet.worksheet_by_title('pandas_dict')
     wk5 = main_sheet.worksheet_by_title('postgres_dict')
     # create a pandas df and export as CSV
     crypt_data = pd.DataFrame()
-    for wk in [wk1, wk2, wk3, wk4, wk5]:
+    for wk in [wk1, wk2, wk4, wk5]:
         df = pd.DataFrame(wk.get_all_records())
         crypt_data = crypt_data.append(df, ignore_index=True)
     # This is to maintain a history of cryptdata. May not be needed in the future
     crypt_data.to_csv(roots + r'/data/cryptdata_{0}.csv'.format(datetime.now().strftime('%y-%m-%d')))
     # This will be copied to the app folder and is used by the app to run.
     # Maybe the date wont be required in the future
-    crypt_data.to_csv(roots + r'/app/cryptdata_{0}.csv'.format(datetime.now().strftime('%y-%m-%d')), index=False)
+    crypt_data.to_csv(roots + r'/app/cryptdata.csv', index=False)
     logging.info('Created CSV')
     return crypt_data
 
 
 def main(arg):
     # ----------- setup logger ---------- #
-    #files = os.path.join(logs, 'fetch_cryptdata_{}.log'.format(datetime.now().strftime('%y-%m-%d')))
-    #setup_logger(files)
-    #logging.info('***** Running Fetch Crypt Data Log Report *****\n')
-    #logging.debug(arg)
+    # files = os.path.join(logs, 'fetch_cryptdata_{}.log'.format(datetime.now().strftime('%y-%m-%d')))
+    # setup_logger(files)
+    # logging.info('***** Running Fetch Crypt Data Log Report *****\n')
+    # logging.debug(arg)
     try:
         crypt_data = get_crypt_data_2df()
-        #print(crypt_data)
+        # print(crypt_data)
         engine = create_engine('postgresql://{0}:{1}@{2}:{3}/{4}'.format(db_list['user'],
                                                                          db_list['password'],
                                                                          db_list['host'],
