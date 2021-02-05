@@ -96,9 +96,7 @@ addQuotes <- function(x) sprintf("'%s'", paste(x))
 # The reason is so that in the output display we don't have the character 
 # vectors with quotes. However the code display requires it so hence two sets.
 lol_champions_code<-lol_champions
-lol_champions_code$name<-addQuotes(lol_champions_code$name)
-lol_champions_code$class<-addQuotes(lol_champions_code$class)
-lol_champions_code$damagetype<-addQuotes(lol_champions_code$damagetype)
+lol_champions_code <- lol_champions_code %>% modify_if(is.character,addQuotes)
 
 # List of available functions for translation
 list_of_funcs<-unique(cryptdata$func)
@@ -170,7 +168,6 @@ lock_and_load_syntax<-function(funct,language,module,
                          value_1= value_1,
                          value_2= value_2)
                     ) #closing bracket of if-else statement 
-  #final_syn<-as.character(final_syn)
   # the foll statement is required as there was an issue with html recognising
   # a new line.
   final_syn<-gsub('<br/>','\n',final_syn)
@@ -188,10 +185,5 @@ get_values<-function(x,y){
   return(choices)
 }
 
-
-# display output tables 
-# table_output <- function(funct) {
-#   df <- lol_champions %>% filter(func == funct, lang == "R", mod == "dplyr") %>%
-# }
 
 
